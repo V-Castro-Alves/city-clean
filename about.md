@@ -36,7 +36,9 @@ O sistema é destinado a cidadãos residentes em áreas urbanas que buscam desca
 - **RN01:** Uma denúncia de descarte irregular só pode ser finalizada se houver pelo menos uma foto anexada e a localização.
 - **RN02:** O agendamento de coleta de grande porte exige um intervalo mínimo de 48 horas de antecedência.
 - **RN03:** O usuário deve estar logado no sistema para realizar solicitações ou denúncias.
+- **RN04:** O cancelamento de um agendamento só é permitido com no mínimo 48 horas de antecedência em relação à data solicitada. Denúncias podem ser canceladas enquanto estiverem com status *enviada* ou *em análise*.
 - **RN05:** O Magic Link só é válido por 15 minutos após envio e invalida logins anteriores no mesmo email.
+- **RN06:** Cada data de agendamento aceita no máximo 5 solicitações de coleta.
 
 # Modelagem
 
@@ -48,50 +50,52 @@ skinparam classAttributeIconSize 0
 
 class Usuario {
   - id: Integer
-  - nome: String
-  - sobrenome: String
-  - email: String
+  - first_name: String
+  - last_name: String
+  - email: String (unique)
+  - cpf: String(14) (unique)
   - telefone: String
-  + realizarLogin()
-  + consultarSolicitacoes()
+  - endereco: String
+}
+
+class Material {
+  - id: Integer
+  - nome: String (unique)
 }
 
 class PontoDeColeta {
   - id: Integer
   - nome: String
   - endereco: String
+  - horario: String
   - latitude: Decimal
   - longitude: Decimal
-  - tiposMateriaisAceitos: List<String>
-  + buscarProximos(localizacao: String)
+  - materiais_aceitos: ManyToMany<Material>
 }
 
-abstract class Solicitacao {
+class Solicitacao {
   - id: Integer
-  - dataCriacao: DateTime
-  - status: String
+  - uuid: UUID (unique)
+  - tipo_solicitacao: Enum {denuncia, agendamento}
+  - status: Enum {enviada, em_analise, aprovada, concluida, cancelada}
   - descricao: String
-  + atualizarStatus(novoStatus: String)
-}
-
-class Denuncia {
-  - fotoUrl: String
+  - foto: Image (obrigatória)
+  - foto2: Image (opcional)
+  - foto3: Image (opcional)
   - latitude: Decimal
   - longitude: Decimal
-  + validarDenuncia()
-}
-
-class AgendamentoColeta {
-  - dataAgendada: Date
-  - tipoItem: String
-  - volumeEstimado: String
-  + confirmarAgendamento()
+  - materiais: ManyToMany<Material>
+  - volume_estimado: String
+  - requested_date: Date (agendamento)
+  - scheduled_date: Date (agendamento)
+  - motivo_cancelamento: String
+  - data_criacao: DateTime
 }
 
 ' Relacionamentos
 Usuario "1" -- "0..*" Solicitacao : realiza >
-Solicitacao <|-- Denuncia
-Solicitacao <|-- AgendamentoColeta
+Solicitacao "0..*" -- "0..*" Material : categoriza >
+PontoDeColeta "0..*" -- "0..*" Material : aceita >
 
 @enduml
 ```
@@ -105,22 +109,28 @@ skinparam packageStyle rectangle
 
 actor "Cidadão" as user
 
-rectangle "Sistema EcoZeladoria Urbana" {
+rectangle "Sistema CityClean" {
   usecase "Consultar Pontos de Descarte" as UC1
   usecase "Solicitar Coleta de Itens Grandes" as UC2
   usecase "Registrar Denúncia de Descarte Irregular" as UC3
   usecase "Anexar Foto e Localização" as UC4
   usecase "Receber Confirmação de Solicitação" as UC5
   usecase "Consultar Status de Solicitação" as UC6
-  
+  usecase "Cancelar Solicitação" as UC7
+  usecase "Autenticar via Magic Link" as UC8
+
   user -- UC1
   user -- UC2
   user -- UC3
   user -- UC6
-  
+  user -- UC7
+  user -- UC8
+
   UC3 ..> UC4 : <<include>>
   UC2 ..> UC5 : <<include>>
   UC3 ..> UC5 : <<include>>
+  UC2 ..> UC8 : <<extend>>
+  UC3 ..> UC8 : <<extend>>
 }
 @enduml
 ```

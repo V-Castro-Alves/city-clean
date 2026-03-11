@@ -8,7 +8,7 @@ class Material(models.Model):
     def __str__(self):
         return self.nome
 
-''
+
 class PontoDeColeta(models.Model):
     nome = models.CharField(max_length=200)
     endereco = models.CharField(max_length=300)
