@@ -1,5 +1,5 @@
 import json
-from decimal import Decimal
+from django.urls import reverse
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -99,7 +99,6 @@ def solicitacao_cancel_view(request, uuid):
 # ---- helpers ----
 
 def _send_confirmation_email(request, solicitacao):
-    from django.urls import reverse
     tipo = solicitacao.get_tipo_solicitacao_display()
     subject = f'Solicitação recebida — {tipo} #{solicitacao.uuid}'
     detail_url = request.build_absolute_uri(reverse('solicitacao_detail', args=[solicitacao.uuid]))

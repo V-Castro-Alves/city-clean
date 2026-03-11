@@ -1,6 +1,11 @@
 import uuid
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
+from io import BytesIO
+from PIL import Image as PILImage
+from django.core.files.base import ContentFile
+import os
 
 class Material(models.Model):
     nome = models.CharField(max_length=100, unique=True)
@@ -72,7 +77,6 @@ class Solicitacao(models.Model):
         return " — ".join(parts)
 
     def get_absolute_url(self):
-        from django.urls import reverse
         return reverse('solicitacao_detail', args=[self.uuid])
 
     @property
@@ -151,10 +155,7 @@ class Solicitacao(models.Model):
                 file_obj = getattr(self, field_name)
                 if not file_obj:
                     continue
-                from io import BytesIO
-                from PIL import Image as PILImage
-                from django.core.files.base import ContentFile
-                import os
+
                 try:
                     img = PILImage.open(file_obj)
                     img = img.convert('RGB')

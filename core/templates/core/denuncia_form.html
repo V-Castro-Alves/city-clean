@@ -142,9 +142,16 @@
             </h6>
           </div>
           <div class="card-body p-4">
-            <button type="button" id="btn-gps" class="btn btn-outline-warning">
-              <i class="bi bi-crosshair2 me-1"></i> Capturar localização via GPS
-            </button>
+            <div class="d-flex flex-wrap gap-2">
+              <button type="button" id="btn-gps" class="btn btn-outline-warning">
+                <i class="bi bi-crosshair2 me-1"></i> Capturar localização via GPS
+              </button>
+              {% if debug %}
+              <button type="button" id="btn-dev-location" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-bug me-1"></i> Dev: centro de Joinville
+              </button>
+              {% endif %}
+            </div>
             <div id="gps-status" class="form-text mt-2"></div>
             {{ form.latitude }}
             {{ form.longitude }}
@@ -166,6 +173,18 @@
 
 {% block extra_js %}
 <script>
+// Dev: fill Joinville city center
+{% if debug %}
+document.getElementById('btn-dev-location').addEventListener('click', () => {
+  const lat = '-26.304700';
+  const lng = '-48.846200';
+  document.getElementById('id_latitude').value = lat;
+  document.getElementById('id_longitude').value = lng;
+  document.getElementById('gps-status').innerHTML =
+    `<span class="text-secondary"><i class="bi bi-bug-fill me-1"></i>[Dev] Localização definida: ${lat}, ${lng} (centro de Joinville)</span>`;
+});
+{% endif %}
+
 // GPS capture
 document.getElementById('btn-gps').addEventListener('click', () => {
   const statusEl = document.getElementById('gps-status');
