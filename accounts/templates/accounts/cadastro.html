@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Cadastro — CityClean{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-sm-10 col-md-8 col-lg-6">
+      <div class="card border-0 shadow-sm p-4">
+        <div class="text-center mb-4">
+          <i class="bi bi-person-plus text-success" style="font-size:2.5rem;"></i>
+          <h3 class="fw-bold mt-2">Criar conta</h3>
+          <p class="text-muted small">Cadastre-se para solicitar coletas e reportar denúncias.</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <label class="form-label fw-semibold">Nome <span class="text-danger">*</span></label>
+              <input type="text" name="first_name" class="form-control" placeholder="João" required>
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label fw-semibold">Sobrenome <span class="text-danger">*</span></label>
+              <input type="text" name="last_name" class="form-control" placeholder="Silva" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">CPF <span class="text-danger">*</span></label>
+              <input type="text" name="cpf" class="form-control" placeholder="000.000.000-00" maxlength="14" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">E-mail <span class="text-danger">*</span></label>
+              <input type="email" name="email" class="form-control" placeholder="seu@email.com" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Telefone <span class="text-danger">*</span></label>
+              <input type="tel" name="telefone" class="form-control" placeholder="(47) 99999-9999" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Endereço <span class="text-danger">*</span></label>
+              <input type="text" name="endereco" class="form-control" placeholder="Rua, número, bairro, Joinville/SC" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success btn-lg w-100 mt-4">
+            <i class="bi bi-person-check me-1"></i> Criar conta
+          </button>
+        </form>
+
+        <hr class="my-4">
+        <p class="text-center mb-0 small">
+          Já tem conta?
+          <a href="{% url 'login' %}" class="text-success fw-semibold">Entrar</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

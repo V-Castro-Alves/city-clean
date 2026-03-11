@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Dúvidas Frequentes — CityClean{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="fw-bold mb-1"><i class="bi bi-question-circle-fill text-success"></i> Dúvidas Frequentes</h1>
+  <p class="text-muted mb-4">Tudo o que você precisa saber sobre descarte e coleta consciente.</p>
+
+  <div class="accordion" id="faqAccordion">
+
+    <div class="accordion-item border-0 shadow-sm mb-2">
+      <h2 class="accordion-header">
+        <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+          Quais materiais recicláveis posso descartar?
+        </button>
+      </h2>
+      <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+        <div class="accordion-body text-muted">
+          Nos pontos de coleta de recicláveis aceitamos: papel, papelão, plástico, vidro e metal.
+          Certifique-se de que os itens estejam limpos e secos. Materiais sujos ou molhados não podem ser reciclados.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item border-0 shadow-sm mb-2">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+          Como descartar eletrônicos usados?
+        </button>
+      </h2>
+      <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body text-muted">
+          Eletrônicos (celulares, computadores, eletrodomésticos, pilhas e baterias) devem ser entregues
+          em pontos específicos de coleta de e-lixo. Nunca descarte na lixeira comum pois contêm
+          substâncias tóxicas prejudiciais ao meio ambiente.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item border-0 shadow-sm mb-2">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+          Posso agendar a coleta de móveis e entulho?
+        </button>
+      </h2>
+      <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body text-muted">
+          Sim! Móveis, colchões, eletrodomésticos grandes e entulho de pequenas reformas podem ser agendados
+          pela aba <strong>Solicitar Coleta</strong>. O agendamento deve ser feito com pelo menos 2 dias de
+          antecedência. Cada data tem capacidade limitada de coletas.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item border-0 shadow-sm mb-2">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+          Como descartar óleo de cozinha usado?
+        </button>
+      </h2>
+      <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body text-muted">
+          Guarde o óleo de cozinha em garrafas PET vedadas e entregue nos pontos de coleta de óleo.
+          Nunca descarte óleo na pia, vaso sanitário ou lixo comum — 1 litro de óleo pode contaminar
+          até 1 milhão de litros de água.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item border-0 shadow-sm mb-2">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+          O que fazer se encontrar descarte irregular?
+        </button>
+      </h2>
+      <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body text-muted">
+          Use a função <strong>Denúncia</strong> do aplicativo. Tire uma foto do local, capture a
+          localização via GPS e envie a denúncia. Nossa equipe analisa e agenda a limpeza do local.
+          Sua denúncia é confidencial.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item border-0 shadow-sm mb-2">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+          Como funciona o link de acesso por e-mail?
+        </button>
+      </h2>
+      <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body text-muted">
+          Para entrar na plataforma, enviamos um link seguro para o seu e-mail (sem necessidade de senha).
+          O link é válido por 15 minutos e pode ser usado apenas uma vez. Isso torna o acesso mais seguro
+          e elimina o risco de senhas comprometidas.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

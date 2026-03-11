@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Pontos de Descarte — CityClean{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  #map { height: 420px; border-radius: .5rem; }
+  .material-badge { font-size:.75rem; }
+  .filter-tab.active { background-color: #198754 !important; color: #fff !important; border-color: #198754 !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="fw-bold mb-1"><i class="bi bi-geo-alt-fill text-success"></i> Pontos de Descarte</h1>
+  <p class="text-muted mb-4">Localize o ponto mais próximo e veja quais materiais são aceitos.</p>
+
+  <!-- Filter tabs -->
+  <div class="mb-3 d-flex gap-2 flex-wrap">
+    <button class="btn btn-outline-success filter-tab active" data-filter="todos">Todos</button>
+    <button class="btn btn-outline-success filter-tab" data-filter="Recicláveis">Recicláveis</button>
+    <button class="btn btn-outline-success filter-tab" data-filter="Eletrônicos">Eletrônicos</button>
+    <button class="btn btn-outline-success filter-tab" data-filter="Móveis">Móveis/Entulho</button>
+    <button class="btn btn-outline-success filter-tab" data-filter="Óleo">Óleo</button>
+  </div>
+
+  <!-- Map -->
+  <div id="map" class="mb-4 shadow-sm"></div>
+
+  <!-- Cards -->
+  <div class="row g-3" id="pontos-cards">
+    {% for ponto in pontos %}
+    <div class="col-md-6 col-lg-4 ponto-card" data-materiais="{{ ponto.materiais_aceitos.all|join:',' }}">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold card-title">{{ ponto.nome }}</h6>
+          <p class="text-muted small mb-1"><i class="bi bi-geo-alt me-1"></i>{{ ponto.endereco }}</p>
+          {% if ponto.horario %}
+          <p class="text-muted small mb-2"><i class="bi bi-clock me-1"></i>{{ ponto.horario }}</p>
+          {% endif %}
+          <div class="d-flex flex-wrap gap-1 mt-2">
+            {% for m in ponto.materiais_aceitos.all %}
+            <span class="badge bg-success-subtle text-success material-badge">{{ m.nome }}</span>
+            {% empty %}
+            <span class="badge bg-secondary-subtle text-secondary material-badge">Geral</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <p class="text-muted text-center py-4">Nenhum ponto de descarte cadastrado ainda.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const pontosData = {{ pontos_json|safe }};
+
+// ---- Leaflet map ----
+const JOI_LAT = -26.3044, JOI_LNG = -48.8487;
+const defaultLat = pontosData.length ? pontosData[0].lat : JOI_LAT;
+const defaultLng = pontosData.length ? pontosData[0].lng : JOI_LNG;
+const map = L.map('map').setView([defaultLat, defaultLng], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+const markerMap = {};  // id -> marker
+
+pontosData.forEach(p => {
+  const popup = `<strong>${p.nome}</strong><br>${p.endereco}${p.horario ? '<br><em>' + p.horario + '</em>' : ''}<br>${p.materiais.join(', ') || 'Geral'}`;
+  const marker = L.marker([p.lat, p.lng]).bindPopup(popup).addTo(map);
+  markerMap[p.id] = { marker, materiais: p.materiais };
+});
+
+if (pontosData.length > 1) {
+  const group = L.featureGroup(Object.values(markerMap).map(m => m.marker));
+  map.fitBounds(group.getBounds().pad(0.1));
+}
+
+// ---- Filter logic ----
+document.querySelectorAll('.filter-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+
+    document.querySelectorAll('.ponto-card').forEach(card => {
+      const mats = card.dataset.materiais;
+      const visible = filter === 'todos' || mats.includes(filter);
+      card.style.display = visible ? '' : 'none';
+    });
+
+    Object.entries(markerMap).forEach(([id, obj]) => {
+      const visible = filter === 'todos' || obj.materiais.some(m => m.includes(filter));
+      if (visible) {
+        map.addLayer(obj.marker);
+      } else {
+        map.removeLayer(obj.marker);
+      }
+    });
+  });
+});
+</script>
+{% endblock %}

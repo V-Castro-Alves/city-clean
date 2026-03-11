@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sesame',
     'accounts',
     'core',
 ]
@@ -108,8 +109,8 @@ AUTHENTICATION_BACKENDS = [
 # Use the Console backend to see the links in your terminal
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Make tokens expire after 10 minutes
-SESAME_MAX_AGE = 600
+# Make tokens expire after 15 minutes (RNF04)
+SESAME_MAX_AGE = 900
 
 SESAME_ONE_TIME = True
 
@@ -135,3 +136,12 @@ AUTH_USER_MODEL = 'accounts.Usuario'
 # Media files (user uploads)
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Geographic bounding box for service area (RF05) — Joinville-SC
+SERVICE_AREA_LAT_MIN = -26.45
+SERVICE_AREA_LAT_MAX = -26.15
+SERVICE_AREA_LNG_MIN = -49.00
+SERVICE_AREA_LNG_MAX = -48.70
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'

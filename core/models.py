@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.conf import settings
 
@@ -11,6 +12,7 @@ class Material(models.Model):
 class PontoDeColeta(models.Model):
     nome = models.CharField(max_length=200)
     endereco = models.CharField(max_length=300)
+    horario = models.CharField(max_length=100, blank=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     materiais_aceitos = models.ManyToManyField(Material, blank=True)
@@ -43,6 +45,8 @@ class Solicitacao(models.Model):
 
     descricao = models.TextField(blank=True)
     foto = models.ImageField(upload_to='solicitacoes/')
+    foto2 = models.ImageField(upload_to='solicitacoes/', blank=True)
+    foto3 = models.ImageField(upload_to='solicitacoes/', blank=True)
     materiais = models.ManyToManyField(Material, blank=True)
     tipo_solicitacao = models.CharField(max_length=20, choices=TipoSolicitacao, default=TipoSolicitacao.NAO_ESPECIFICADO)
 
@@ -55,16 +59,38 @@ class Solicitacao(models.Model):
     motivo_cancelamento = models.TextField(blank=True)
 
     data_criacao = models.DateTimeField(auto_now_add=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
-    volume_estimado = models.CharField(max_length=100)
+    volume_estimado = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         parts = [f"{self.__class__.__name__} #{self.pk}", self.status]
         if self.scheduled_date:
             parts.append(f"on {self.scheduled_date}")
         return " — ".join(parts)
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('solicitacao_detail', args=[self.uuid])
+
+    @property
+    def uuid_short(self):
+        return str(self.uuid)[:8].upper()
+
+    @property
+    def can_cancel(self):
+        import datetime
+        if self.status in {self.Status.CANCELADA, self.Status.CONCLUIDA}:
+            return False
+        if self.tipo_solicitacao == self.TipoSolicitacao.AGENDAMENTO:
+            if not self.requested_date:
+                return False
+            return (self.requested_date - datetime.date.today()).days >= 2
+        if self.tipo_solicitacao == self.TipoSolicitacao.DENUNCIA:
+            return self.status in {self.Status.ENVIADA, self.Status.EM_ANALISE}
+        return False
 
     # ----- scheduling helpers -----
     @classmethod
@@ -118,6 +144,32 @@ class Solicitacao(models.Model):
             orig = Solicitacao.objects.filter(pk=self.pk).first()
             if orig:
                 old_status = orig.status
+
+        # Compress uploaded photo (RF03): JPEG 80% quality, max 2 MB
+        if is_new:
+            for field_name in ('foto', 'foto2', 'foto3'):
+                file_obj = getattr(self, field_name)
+                if not file_obj:
+                    continue
+                from io import BytesIO
+                from PIL import Image as PILImage
+                from django.core.files.base import ContentFile
+                import os
+                try:
+                    img = PILImage.open(file_obj)
+                    img = img.convert('RGB')
+                    output = BytesIO()
+                    quality = 80
+                    img.save(output, format='JPEG', quality=quality, optimize=True)
+                    while output.tell() > 2 * 1024 * 1024 and quality > 20:
+                        quality -= 10
+                        output = BytesIO()
+                        img.save(output, format='JPEG', quality=quality, optimize=True)
+                    filename = os.path.splitext(file_obj.name)[0] + '.jpg'
+                    setattr(self, field_name, ContentFile(output.getvalue(), name=filename))
+                except Exception:
+                    pass  # keep original if compression fails
+
         super().save(*args, **kwargs)
 
         # automatic scheduling for denúncias when approved
