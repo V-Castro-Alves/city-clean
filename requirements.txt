@@ -1,0 +1,4 @@
+asgiref==3.11.1
+Django==6.0.3
+django-sesame==3.2.3
+sqlparse==0.5.5

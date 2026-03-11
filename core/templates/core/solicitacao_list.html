@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>My Solicitações</h1>
+  <ul>
+    {% for s in solicitacoes %}
+      <li><a href="{% url 'solicitacao_detail' s.pk %}">{{ s }}</a></li>
+    {% empty %}
+      <li>No requests yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

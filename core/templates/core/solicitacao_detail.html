@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Solicitação {{ solicitacao.pk }}</h1>
+  <p>Tipo: {{ solicitacao.get_tipo_solicitacao_display }}</p>
+  <p>Status: {{ solicitacao.get_status_display }}</p>
+  <p>Requested date: {{ solicitacao.requested_date }}</p>
+  <p>Scheduled date: {{ solicitacao.scheduled_date }}</p>
+  <p>Description: {{ solicitacao.descricao }}</p>
+  <p>Volume: {{ solicitacao.volume_estimado }}</p>
+  {% if solicitacao.reschedules.exists %}
+    <h2>Reschedule history</h2>
+    <ul>
+      {% for r in solicitacao.reschedules.all %}
+        <li>{{ r.changed_at }}: {{ r.old_date }} → {{ r.new_date }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

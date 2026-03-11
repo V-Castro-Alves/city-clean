@@ -1,0 +1,154 @@
+Grandes centros urbanos enfrentam diversos problemas relacionados ao descarte inadequado de resíduos. Materiais como móveis, eletrodomésticos, eletrônicos, óleo de cozinha, entulhos e resíduos recicláveis são frequentemente descartados em locais impróprios, gerando impactos ambientais, riscos à saúde pública e degradação do espaço urbano.
+
+Além disso, muitos cidadãos não sabem:
+
+Onde descartar corretamente determinados materiais;
+
+Como solicitar coleta de objetos de grande porte;
+
+Como denunciar pontos de descarte irregular;
+
+Quais são os procedimentos corretos definidos pelo município.
+
+Diante desse cenário, o objetivo desta atividade é propor o desenvolvimento de uma solução digital voltada ao cidadão, que ajude a organizar informações e facilitar o descarte correto de resíduos.
+
+ 
+
+Proposta do Projeto
+
+Desenvolver um sistema voltado ao usuário final que permita:
+
+Consultar locais adequados para descarte de materiais;
+
+Solicitar coleta de itens de grande porte;
+
+Registrar denúncias com envio de imagem e descrição;
+
+Receber confirmação da solicitação realizada.
+
+O escopo inicial do projeto considera apenas o lado do usuário, sem necessidade de implementação de painel administrativo.
+
+ 
+
+Etapas do Projeto
+
+Etapa 1 – Análise e Requisitos
+
+Elaborar a documentação inicial do sistema contendo:
+
+Definição clara do problema;
+
+Objetivo do sistema;
+
+Identificação do público-alvo;
+
+Levantamento de no mínimo 10 requisitos funcionais;
+
+Levantamento de no mínimo 3 requisitos não funcionais;
+
+Definição das principais regras de negócio.
+
+ 
+
+Etapa 2 – Prototipação
+
+Criar os mockups das telas do sistema utilizando Figma, contendo:
+
+Fluxo de navegação do sistema;
+
+Representação das principais telas da aplicação;
+
+Estrutura de interação do usuário com o sistema.
+
+ 
+
+Etapa 3 – Desenvolvimento
+
+Implementar uma versão inicial do sistema contendo:
+
+Estrutura organizada do projeto;
+
+Funcionalidades mínimas do sistema;
+
+Persistência de dados;
+
+Utilização de Git para versionamento.
+
+Os commits devem ser claros e descritivos.
+
+
+Etapa 4 – Apresentação e Defesa Técnica
+
+Na apresentação final, cada aluno deverá:
+
+Demonstrar o sistema funcionando;
+
+Explicar as decisões técnicas adotadas;
+
+Defender a modelagem e a estrutura do projeto;
+
+Apresentar o fluxo de funcionamento da aplicação.
+
+A defesa técnica será individual.
+
+ 
+
+Diretrizes Técnicas
+
+Durante o desenvolvimento do projeto é obrigatório:
+
+Uso de Git para versionamento do código;
+
+Uso de Trello para organização das tarefas;
+
+Repositório com commits descritivos;
+
+Criação de Pull Requests (com o professor como revisor).
+
+ 
+
+Relatório Final
+
+O relatório do projeto deve seguir as normas da ABNT e conter:
+
+Identificação do Projeto
+
+Descrição detalhada do problema
+
+Objetivos do sistema
+
+Público-alvo
+
+Requisitos funcionais
+
+Requisitos não funcionais
+
+Regras de negócio
+
+Modelagem (Casos de Uso e Diagrama ER ou Classes)
+
+Mockups desenvolvidos no Figma
+
+Considerações finais
+
+
+Observação sobre uso de IA
+
+O uso de ferramentas de inteligência artificial não é incentivado nesta atividade. Caso seja utilizado, o aluno deverá compreender integralmente todas as decisões técnicas do projeto e ser capaz de explicá-las durante a defesa técnica.
+
+
+Objetivo da Atividade
+
+Este projeto tem como finalidade avaliar a capacidade do aluno em:
+
+analisar problemas reais;
+
+estruturar soluções digitais;
+
+modelar sistemas;
+
+desenvolver aplicações básicas;
+
+defender tecnicamente suas decisões de projeto.
+
+O objetivo não é a perfeição técnica, mas sim clareza, organização e compreensão do processo de desenvolvimento de software.
