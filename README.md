@@ -18,9 +18,32 @@ cd city-clean
 
 2. Crie e ative um ambiente virtual:
 
+Linux / macOS:
+
 ```bash
 python -m venv venv
 source venv/bin/activate
+```
+
+Windows (PowerShell):
+
+```powershell
+python -m venv venv
+venv\Scripts\Activate.ps1
+```
+
+Windows (CMD):
+
+```cmd
+python -m venv venv
+venv\Scripts\activate.bat
+```
+
+Windows (Git Bash / MSYS):
+
+```bash
+python -m venv venv
+source venv/Scripts/activate
 ```
 
 3. Instale as dependências:
